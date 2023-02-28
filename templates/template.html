@@ -1,0 +1,23 @@
+{% load draw_menu %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ url_title|title }}</title>
+    <meta charset="utf-8" />
+    <style>
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+        a:hover {
+            color: blue;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>{{ heading }}</h1>
+    {% draw_menu "main_menu" %}
+</body>
+</html>
