@@ -5,7 +5,7 @@ from backend.models import MenuItem
 
 def index(request):
     """
-    Function for template file handle 
+    Function for template file handle
     """
 
     title = MenuItem.objects.get(url=request.path).title
@@ -16,6 +16,10 @@ def index(request):
 
 
 def other(request):
+    """
+    Function for template file handle
+    """
+
     if MenuItem.objects.filter(url=request.path).count():
         title = MenuItem.objects.get(url=request.path).title
         return render(request, "template.html", {

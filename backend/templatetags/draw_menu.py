@@ -7,10 +7,26 @@ register = Library()
 
 
 def get_index_element_in_array(element: dict, array: list):
+    """
+    Function for find element in array and return its index
+
+    :element: dict
+    :array: list
+    
+    :return: dict
+    """
     return next((i for i, item in enumerate(array) if item["object"] == element), None)
 
 
 def get_element_in_array(element: dict, array: list) -> dict:
+    """
+    Function for find element in array and return its element
+
+    :element: dict
+    :array: list
+
+    :return: dict
+    """
     object = get_index_element_in_array(element, array)
     if object is not None:
         if array:
@@ -18,7 +34,14 @@ def get_element_in_array(element: dict, array: list) -> dict:
     return {"object": element, "childrens": []}
 
 
-def get_menu_objects(all_items: Menu) -> dict:
+def get_menu_objects(all_items: Menu) -> list:
+    """
+    Function for create menu object and return its
+
+    :all_items: Menu
+
+    :return: list
+    """
     menu_and_items = []
 
     for item in all_items:
@@ -46,7 +69,33 @@ def get_menu_objects(all_items: Menu) -> dict:
     return menu_and_items
 
 
+def checked_in_childrens(childrens: list, path: str) -> bool:
+    """
+    Function to check whether the child is selected
+
+    :childrens: list
+    :path: str
+
+    :return: bool
+    """
+    for child in childrens:
+        if len(child['childrens']) > 0:
+            if checked := checked_in_childrens(child['childrens'], path):
+                return checked
+        if child['object'].url == path:
+            return True
+    return False
+
+
 def serialize_dict_to_html(dict: dict, path: str, stop: bool = False) -> str:
+    """
+    Function to serialization from dictionary to html
+
+    :dict: dict
+    :path: str
+
+    :return: str
+    """
     temp_html = ""
     style = "'color: green'"
 
@@ -55,9 +104,10 @@ def serialize_dict_to_html(dict: dict, path: str, stop: bool = False) -> str:
 
     temp_html = f"<li><a href='{menu.url}' style={style if checked else ''}>{menu.title}</a></li>"
 
-    for child in dict['childrens']:
-        if not stop:
-            temp_html += "<ul>" + serialize_dict_to_html(child, path, checked) + "</ul>"
+    if checked or checked_in_childrens(dict['childrens'], path):
+        for child in dict['childrens']:
+            if not stop:
+                temp_html += "<ul>" + serialize_dict_to_html(child, path, checked) + "</ul>"
 
     return temp_html
 
